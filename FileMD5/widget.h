@@ -32,6 +32,7 @@ private:
     QHBoxLayout *pHLayoutBtn;
 
 public slots:
+    void onLineEditChanged();
     void onBtnVerify();
 
 };

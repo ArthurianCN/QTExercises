@@ -1,5 +1,5 @@
 #include "widget.h"
-#include "ui_widget.h"
+#include <QMessageBox>
 
 const QString GetFileMd5(const QString &path)
 {
@@ -29,16 +29,15 @@ const QString GetFileMd5(const QString &path)
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
-//    , ui(new Ui::Widget)
 {
     this->resize( QSize( 400, 100 ));
     m_pLayoutMain = new QVBoxLayout(this);
-    m_lableHash1 = new QLabel("md51", this);
+    m_lableHash1 = new QLabel( this);
     m_pLayoutMain->addWidget(m_lableHash1);
     m_LineEditCustomFilePath1 = new QLineEditCustom(this);
     m_pLayoutMain->addWidget(m_LineEditCustomFilePath1);
 
-    m_lableHash2 = new QLabel("md52", this);
+    m_lableHash2 = new QLabel(this);
     m_pLayoutMain->addWidget(m_lableHash2);
     m_LineEditCustomFilePath2 = new QLineEditCustom(this);
     m_pLayoutMain->addWidget(m_LineEditCustomFilePath2);
@@ -51,9 +50,9 @@ Widget::Widget(QWidget *parent)
     m_pLayoutMain->addLayout(pHLayoutBtn);
 
     setLayout(m_pLayoutMain);
-    connect(m_LineEditCustomFilePath1, &QLineEdit::textChanged, this, &Widget::onBtnVerify);
-    connect(m_LineEditCustomFilePath2, &QLineEdit::textChanged, this, &Widget::onBtnVerify);
-    //connect(m_pBtnVerify, &QPushButton::clicked, this, &Widget::onBtnVerify);
+    connect(m_LineEditCustomFilePath1, &QLineEdit::textChanged, this, &Widget::onLineEditChanged);
+    connect(m_LineEditCustomFilePath2, &QLineEdit::textChanged, this, &Widget::onLineEditChanged);
+    connect(m_pBtnVerify, &QPushButton::clicked, this, &Widget::onBtnVerify);
 }
 
 Widget::~Widget()
@@ -61,7 +60,7 @@ Widget::~Widget()
     //    delete ui;
 }
 
-void Widget::onBtnVerify()
+void Widget::onLineEditChanged()
 {
     QLineEditCustom* lineEditFile = qobject_cast<QLineEditCustom*>(sender());
     if(lineEditFile == m_LineEditCustomFilePath1)
@@ -71,6 +70,20 @@ void Widget::onBtnVerify()
     else
     {
         m_lableHash2->setText(GetFileMd5(m_LineEditCustomFilePath2->text().toUtf8().data()));
+    }
+}
+
+void Widget::onBtnVerify()
+{
+    if(0 == m_lableHash1->text().compare(m_lableHash2->text()))
+    {
+        QMessageBox::information(NULL, "Title", "Same",
+                                 QMessageBox::Ok, QMessageBox::Ok);
+    }
+    else
+    {
+        QMessageBox::information(NULL, "Title", "Not Same",
+                                 QMessageBox::Ok, QMessageBox::Ok);
     }
 }
 
