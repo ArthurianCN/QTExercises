@@ -27,6 +27,7 @@ private:
     QNetworkAccessManager* networkManager;
     QLineEdit* m_pLineEditUrl;
     QLineEdit* m_pLineEditLocalFilePath;
+    QLineEdit* m_pLineEditLocalFileName;
     QProgressBar* m_pProgressBar;
 
     QPushButton* m_pBtnStartDownload;
