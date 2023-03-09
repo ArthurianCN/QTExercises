@@ -1,49 +1,33 @@
 #include "DownloadManager.h"
-#include <QPushButton>
-#include <QLineEdit>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QLabel>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
-#include <QUrl>
-#include <QFile>
 #include <QDebug>
 
 DownloadManager::DownloadManager(QWidget *parent)
     : QWidget(parent)
 {
     this->resize(600, 100);
-    QLabel* m_pLblURL = new QLabel("URL:", this);
-    QLineEdit* m_pLineEditUrl = new QLineEdit(this);
-    QHBoxLayout* pHBoxLayoutUrl = new QHBoxLayout();
-    pHBoxLayoutUrl->addWidget(m_pLblURL);
-    pHBoxLayoutUrl->addWidget(m_pLineEditUrl);
+    m_pLineEditUrl = new QLineEdit(this);
+    m_pLineEditLocalFilePath = new QLineEdit(this);
+    m_pLineEditLocalFilePath->setPlaceholderText(("请输入完整的目标文件路径"));
+    m_pProgressBar = new QProgressBar(this);
 
-
-    QLabel* m_pLblLocalFilePath = new QLabel("Path:", this);
-    QLineEdit* m_pLineEditLocalFilePath = new QLineEdit(this);
-    QHBoxLayout* pHBoxLayoutLocalFilePath = new QHBoxLayout();
-    pHBoxLayoutLocalFilePath->addWidget(m_pLblLocalFilePath);
-    pHBoxLayoutLocalFilePath->addWidget(m_pLineEditLocalFilePath);
-
-    QPushButton* m_pBtnStartDownload = new QPushButton("Start", this);
-    QHBoxLayout* pHBoxLayoutBtn = new QHBoxLayout();
+    m_pBtnStartDownload = new QPushButton("Start", this);
+    pHBoxLayoutBtn = new QHBoxLayout();
     pHBoxLayoutBtn->addStretch(1);
     pHBoxLayoutBtn->addWidget(m_pBtnStartDownload);
     pHBoxLayoutBtn->addStretch(1);
 
-    QVBoxLayout* pVBoxLayout = new QVBoxLayout(this);
-    pVBoxLayout->addLayout(pHBoxLayoutUrl);
-    pVBoxLayout->addLayout(pHBoxLayoutLocalFilePath);
-    pVBoxLayout->addLayout(pHBoxLayoutBtn);
+    formLayout = new QFormLayout(this);
+    formLayout->addRow("URL:", m_pLineEditUrl);
+    formLayout->addRow("Path:", m_pLineEditLocalFilePath);
+    formLayout->addRow("Progress:", m_pProgressBar);
+    formLayout->addRow(pHBoxLayoutBtn);
 
     connect(m_pBtnStartDownload, &QPushButton::clicked, [=]()
     {
-        QNetworkAccessManager* networkManager = new QNetworkAccessManager(this);
+        networkManager = new QNetworkAccessManager(this);
         QUrl url = m_pLineEditUrl->text();
 
-        QFile* fileDownload = new QFile(m_pLineEditLocalFilePath->text());
+        fileDownload = new QFile(m_pLineEditLocalFilePath->text());
 
         if(!fileDownload->open(QIODevice::WriteOnly))
         {
@@ -53,12 +37,16 @@ DownloadManager::DownloadManager(QWidget *parent)
         QNetworkReply* reply = networkManager->get(QNetworkRequest(url));
         connect(reply, &QNetworkReply::readyRead, [=](){
             fileDownload->write(reply->readAll());
-            qDebug() << "write";
         });
         connect(reply, &QNetworkReply::finished, [=](){
             fileDownload->flush();
             fileDownload->close();
             qDebug() << "finished" << fileDownload->size() << fileDownload->fileName();
+        });
+
+        connect(reply, &QNetworkReply::downloadProgress, [=](qint64 bytesRead, qint64 bytesTotal){
+            m_pProgressBar->setValue(bytesRead);
+            m_pProgressBar->setMaximum(bytesTotal);
         });
     });
 }
@@ -67,8 +55,4 @@ DownloadManager::~DownloadManager()
 {
 }
 
-void DownloadManager::readyRead()
-{
-
-}
 
