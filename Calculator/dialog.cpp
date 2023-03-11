@@ -1,35 +1,55 @@
 #include "dialog.h"
-#include "ui_dialog.h"
+#include <QStringList>
+#include <QGridLayout>
 
+QStringList strListOpt = {"+", "-", "*", "/", "="};
 Dialog::Dialog(QWidget *parent)
     : QDialog(parent)
-    , ui(new Ui::Dialog)
 {
-    ui->setupUi(this);
+    QGridLayout* pGridLayout = new QGridLayout(this);
+    m_pLineEdit = new QLineEdit(this);
+    pGridLayout->addWidget(m_pLineEdit, 0, 0, 1, 4);
+    for(int i = 0; i < 11; ++i)
+    {
+        if(10 == i)
+        {
+            m_pArrBtnNum[10] = new QPushButton(".", this);
+        }
+        else if(9 == i)
+        {
+            m_pArrBtnNum[i] = new QPushButton("0", this);
+        }
+        else
+        {
+            m_pArrBtnNum[i] = new QPushButton(QString::number(i + 1), this);
+        }
+
+        connect(m_pArrBtnNum[i], &QPushButton::clicked, this, &Dialog::onPushbuttonNumClicked);
+
+        pGridLayout->addWidget(m_pArrBtnNum[i], i / 3 + 1, i % 3, 1, 1);
+    }
+
     calcflag = 0;
     ans = 0;
-    connect(ui->pushButton_plus, SIGNAL(clicked(bool)), this, SLOT(onPushbuttonOperatorClicked()));
-    connect(ui->pushButton_minus, SIGNAL(clicked(bool)), this, SLOT(onPushbuttonOperatorClicked()));
-    connect(ui->pushButton_multi, SIGNAL(clicked(bool)), this, SLOT(onPushbuttonOperatorClicked()));
-    connect(ui->pushButton_divide, SIGNAL(clicked(bool)), this, SLOT(onPushbuttonOperatorClicked()));
-    connect(ui->pushButton_equal, SIGNAL(clicked(bool)), this, SLOT(onPushbuttonOperatorClicked()));
 
-    connect(ui->pushButton_zero, SIGNAL(clicked(bool)), this, SLOT(onPushbuttonNumClicked()));
-    connect(ui->pushButton_dot, SIGNAL(clicked(bool)), this, SLOT(onPushbuttonNumClicked()));
-    connect(ui->pushButton_one, SIGNAL(clicked(bool)), this, SLOT(onPushbuttonNumClicked()));
-    connect(ui->pushButton_two, SIGNAL(clicked(bool)), this, SLOT(onPushbuttonNumClicked()));
-    connect(ui->pushButton_three, SIGNAL(clicked(bool)), this, SLOT(onPushbuttonNumClicked()));
-    connect(ui->pushButton_four, SIGNAL(clicked(bool)), this, SLOT(onPushbuttonNumClicked()));
-    connect(ui->pushButton_five, SIGNAL(clicked(bool)), this, SLOT(onPushbuttonNumClicked()));
-    connect(ui->pushButton_six, SIGNAL(clicked(bool)), this, SLOT(onPushbuttonNumClicked()));
-    connect(ui->pushButton_seven, SIGNAL(clicked(bool)), this, SLOT(onPushbuttonNumClicked()));
-    connect(ui->pushButton_eight, SIGNAL(clicked(bool)), this, SLOT(onPushbuttonNumClicked()));
-    connect(ui->pushButton_nine, SIGNAL(clicked(bool)), this, SLOT(onPushbuttonNumClicked()));
+    for(int i = 0; i < 5; ++i)
+    {
+        m_pArrBtnOpt[i] = new QPushButton(strListOpt[i], this);
+        connect(m_pArrBtnOpt[i], &QPushButton::clicked, this, &Dialog::onPushbuttonOperatorClicked);
+        if(4 == i)
+        {
+            pGridLayout->addWidget(m_pArrBtnOpt[i], 4, 2, 1, 1);
+        }
+        else
+        {
+            pGridLayout->addWidget(m_pArrBtnOpt[i], 1 + i, 3, 1, 1);
+        }
+    }
 }
 
 Dialog::~Dialog()
 {
-    delete ui;
+
 }
 
 
@@ -48,12 +68,12 @@ void Dialog::onPushbuttonNumClicked()
         }
         ans = 0;
         m_qstrNum1 += str;
-        ui->lineEdit->setText(m_qstrNum1);
+        m_pLineEdit->setText(m_qstrNum1);
     }
     else
     {
         m_qstrNum2 += str;
-        ui->lineEdit->setText(m_qstrNum2);
+        m_pLineEdit->setText(m_qstrNum2);
     }
 }
 
@@ -103,7 +123,7 @@ void Dialog::onPushbuttonOperatorClicked()
             break;
         }
 
-        ui->lineEdit->setText(QString::number(ans));
+        m_pLineEdit->setText(QString::number(ans));
         calcflag = 0;
         m_qstrNum1 = QString::number(ans);
     }
