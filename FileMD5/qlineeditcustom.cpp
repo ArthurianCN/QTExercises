@@ -28,12 +28,6 @@ void QLineEditCustom::dragEnterEvent(QDragEnterEvent *event)
 
 }
 
-void QLineEditCustom::dragMoveEvent(QDragMoveEvent *event)
-{
-
-
-}
-
 void QLineEditCustom::dropEvent(QDropEvent *event)
 {
     const QMimeData *mimeData = event->mimeData();
