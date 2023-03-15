@@ -12,7 +12,9 @@ Telnet::Telnet(QWidget *parent)
     setFocusPolicy(Qt::StrongFocus);
     client = new QTcpSocket(this);
     lineEditDstHost = new QLineEdit("www.baidu.com",this);
+    lineEditDstHost->setClearButtonEnabled(true);
     lineEditPort = new QLineEdit("80", this);
+    lineEditPort->setClearButtonEnabled(true);
     btnConnect = new QPushButton("connect", this);
     btnSend = new QPushButton("send", this);
     btnDisconnect = new QPushButton("disconnect", this);
