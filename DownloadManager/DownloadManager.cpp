@@ -12,13 +12,17 @@ DownloadManager::DownloadManager(QWidget *parent)
 {
     this->resize(600, 100);
 
-    m_pLineEditLocalFilePath->setPlaceholderText(("请输入完整的目标文件路径"));
+    m_pLineEditUrl->setClearButtonEnabled(true);
+    m_pLineEditUrl->setPlaceholderText("请输入要下载的文件的URL");
+    m_pLineEditLocalFilePath->setClearButtonEnabled(true);
+    m_pLineEditLocalFilePath->setPlaceholderText(("请输入要保存的目标文件夹"));
+    m_pLineEditLocalFileName->setClearButtonEnabled(true);
+    m_pLineEditLocalFileName->setPlaceholderText("请输入保存的文件名");
     QString downloadDirectory = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
     if (downloadDirectory.isEmpty() || !QFileInfo(downloadDirectory).isDir())
         downloadDirectory = QDir::currentPath();
 
     m_pLineEditLocalFilePath->setText(downloadDirectory);
-
     m_pProgressBar = new QProgressBar(this);
 
     m_pBtnStartDownload = new QPushButton("Start", this);
