@@ -4,7 +4,8 @@ SUBDIRS += \
     Calculator \
     DownloadManager \
     FileMD5 \
-    Telnet
+    Telnet \
+    md5_tool
 
 CONFIG += ordered
 
