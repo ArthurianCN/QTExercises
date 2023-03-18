@@ -7,24 +7,25 @@ const QString GetFileMd5(const QString &path)
     qint64 fileSize = sourceFile.size();
     const qint64 bufferSize = 10240;
 
-    if (sourceFile.open(QIODevice::ReadOnly)) {
-        char buffer[bufferSize];
-        int bytesRead;
-        int readSize = qMin(fileSize, bufferSize);
-
-        QCryptographicHash hash(QCryptographicHash::Md5);
-
-        while (readSize > 0 && (bytesRead = sourceFile.read(buffer, readSize)) > 0) {
-            fileSize -= bytesRead;
-            hash.addData(buffer, bytesRead);
-            readSize = qMin(fileSize, bufferSize);
-        }
-
-        sourceFile.close();
-        return QString(hash.result().toHex());
+    if (!sourceFile.open(QIODevice::ReadOnly))
+    {
+        return QString();
     }
 
-    return QString();
+    char buffer[bufferSize];
+    int bytesRead;
+    int readSize = qMin(fileSize, bufferSize);
+
+    QCryptographicHash hash(QCryptographicHash::Md5);
+
+    while (readSize > 0 && (bytesRead = sourceFile.read(buffer, readSize)) > 0) {
+        fileSize -= bytesRead;
+        hash.addData(buffer, bytesRead);
+        readSize = qMin(fileSize, bufferSize);
+    }
+
+    sourceFile.close();
+    return QString(hash.result().toHex());
 }
 
 Widget::Widget(QWidget *parent)
