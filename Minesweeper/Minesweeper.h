@@ -16,6 +16,8 @@ public:
 
     void MenuBarInit();
 
+    void Restart();
+
 private:
     int m_nLevel = 1;
     MineMap* widget = NULL;

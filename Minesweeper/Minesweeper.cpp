@@ -6,56 +6,83 @@
 #include <QMenu>
 #include <QGridLayout>
 #include "MineMap.h"
-#include "MineItem.h"
 #include <QApplication>
+#include <QMessageBox>
+
 
 Minesweeper::Minesweeper(QMainWindow *parent)
     : QMainWindow(parent)
     , m_nLevel(1)
 {
+    setWindowTitle("扫雷");
+    setWindowFlags(Qt::Window | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);  // 可以达到要求
     MenuBarInit();
 
-    if(1 == m_nLevel)
-    {
-        widget = new MineMap(8, 8, 10);
-    }
-
-    this->setCentralWidget(widget);
+    Restart();
 }
 
 Minesweeper::~Minesweeper()
 {
-    ;
+
 }
+
 
 void Minesweeper::MenuBarInit()
 {
     QMenuBar* pMenuBar = menuBar();
 
-    QMenu* menuGame = new QMenu("游戏(G)");
-    QAction* pActionStart = new QAction("开局（N）");
+    QMenu* menuGame = new QMenu("游戏");
+    QAction* pActionStart = new QAction("开局");
+    connect(pActionStart, &QAction::triggered, [=](){
+        qDebug() << "点击了" << pActionStart->text() << "按钮";
+    });
+
     menuGame->addAction(pActionStart);
     menuGame->addSeparator();
-    QAction* pActionExit = new QAction("退出（X）");
-    connect(pActionExit, &QAction::triggered, [](){
-        qDebug("点击了退出按钮");
+    QAction* pActionExit = new QAction("退出");
+    connect(pActionExit, &QAction::triggered, [=](){
+        qDebug() << "点击了" << pActionExit->text() << "按钮";
         QApplication::quit();
     });
 
     menuGame->addAction(pActionExit);
 
-    QMenu* menuFunction = new QMenu("功能（F）");
-    QAction* pGamePause = new QAction("暂停游戏（P） F1");
-    QAction* pGameRestart = new QAction("重新开始（R）");
+    QMenu* menuFunction = new QMenu("功能");
+    QAction* pGamePause = new QAction("暂停游戏");
+    connect(pGamePause, &QAction::triggered, [=](){
+        qDebug() << "点击了" << pGamePause->text() << "按钮";
+    });
+
+    QAction* pGameRestart = new QAction("重新开始");
+    connect(pGameRestart, &QAction::triggered, [=](){
+        qDebug() << "点击了" << pGameRestart->text() << "按钮";
+        Restart();
+    });
 
     menuFunction->addAction(pGamePause);
     menuFunction->addAction(pGameRestart);
-    QMenu* menuHelp = new QMenu("帮助（H）");
-    QAction* pActionAbout = new QAction("关于（A）");
+    QMenu* menuHelp = new QMenu("帮助");
+    QAction* pActionAbout = new QAction("关于");
+    connect(pActionAbout, &QAction::triggered, [=](){
+        qDebug() << "点击了" << pActionAbout->text() << "按钮";
+        QMessageBox::information(this, "关于扫雷", "这是扫雷的1.0版本", QMessageBox::Close);
+    });
     menuHelp->addAction(pActionAbout);
     pMenuBar->addMenu(menuGame);
 
     pMenuBar->addMenu(menuFunction);
     pMenuBar->addMenu(menuHelp);
 }
+
+void Minesweeper::Restart()
+{
+    if(1 == m_nLevel)
+    {
+        widget = new MineMap(8, 8, 10);
+    }
+
+    this->setCentralWidget(widget);
+    this->setFixedSize(widget->width(), widget->height() + this->menuBar()->height() - 5);
+}
+
 

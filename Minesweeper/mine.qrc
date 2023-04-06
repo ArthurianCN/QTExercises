@@ -1,0 +1,38 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/blk1.bmp</file>
+        <file>res/blk2.bmp</file>
+        <file>res/blk3.bmp</file>
+        <file>res/blk4.bmp</file>
+        <file>res/blk5.bmp</file>
+        <file>res/blk6.bmp</file>
+        <file>res/blk7.bmp</file>
+        <file>res/blk8.bmp</file>
+        <file>res/block_close.bmp</file>
+        <file>res/block_open.bmp</file>
+        <file>res/boom.bmp</file>
+        <file>res/clickboom.bmp</file>
+        <file>res/ele0.bmp</file>
+        <file>res/ele1.bmp</file>
+        <file>res/ele2.bmp</file>
+        <file>res/ele3.bmp</file>
+        <file>res/ele4.bmp</file>
+        <file>res/ele5.bmp</file>
+        <file>res/ele6.bmp</file>
+        <file>res/ele7.bmp</file>
+        <file>res/ele8.bmp</file>
+        <file>res/ele9.bmp</file>
+        <file>res/ele10.bmp</file>
+        <file>res/good.png</file>
+        <file>res/keilboom.bmp</file>
+        <file>res/look.bmp</file>
+        <file>res/lose.bmp</file>
+        <file>res/low.png</file>
+        <file>res/mine_title.bmp</file>
+        <file>res/proud.bmp</file>
+        <file>res/redflag.bmp</file>
+        <file>res/smile.bmp</file>
+        <file>res/unknow.png</file>
+        <file>res/win.png</file>
+    </qresource>
+</RCC>
