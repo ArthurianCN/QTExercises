@@ -8,7 +8,7 @@
 #include <QCryptographicHash>
 #include <QFileDialog>
 #include <QDebug>
-
+#include <QHeaderView>
 
 bool GetFileMD5(QString path, QString &fileMD5)
 {
@@ -51,6 +51,7 @@ Widget::Widget(QWidget *parent)
     QWidget* m_widget2 = new QWidget(this);
     QGridLayout* pLayout2 = new QGridLayout(m_widget2);
     QTableWidget* pTable = new QTableWidget(m_widget2);
+    pTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     // 没有这行，表头不显示
     pTable->setColumnCount(3);
     pTable->setHorizontalHeaderLabels(QStringList() << "文件名" << "MD5" << "对比结果");
@@ -68,8 +69,6 @@ Widget::Widget(QWidget *parent)
     m_tabWidget->addTab(m_widget2, "MD5对比");
     QGridLayout* pLayoutMain = new QGridLayout(this);
     pLayoutMain->addWidget(m_tabWidget);
-
-    this->setFixedSize(500, 300);
 
     connect(pStringSrc, &QTextEdit::textChanged, [=](){
         if(0 == pStringSrc->toPlainText().size())
