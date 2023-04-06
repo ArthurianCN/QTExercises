@@ -15,7 +15,13 @@ SOURCES += \
 HEADERS += \
     dialog.h
 
-FORMS +=
+
+CONFIG(debug, debug|release){
+    DESTDIR = ../build/debug
+}else{
+    DESTDIR = ../build/release
+}
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
