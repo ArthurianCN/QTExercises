@@ -9,7 +9,8 @@ SUBDIRS += \
     SystemHunter \
     Telnet \
 	md5_tool \
-	GetMachineInfo
+	GetMachineInfo \
+	MakePdf
 
 CONFIG += ordered
 
